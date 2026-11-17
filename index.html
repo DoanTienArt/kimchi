@@ -102,7 +102,6 @@
     }
     .table-head-bar h2 { font-size: 16px; font-weight: 800; color: #0f172a; }
     .table-head-bar h2 .sub-italic { font-weight: 400; font-style: italic; font-size: 14px; color: #475569; }
-    .table-head-bar p { font-size: 12px; color: #64748b; margin-top: 2px; }
     .btn-copy {
       background: #2563eb;
       color: #fff;
@@ -272,7 +271,6 @@
     <div class="table-head-bar">
       <div>
         <h2 id="uiTableTitle">Bảng định lượng nguyên liệu <span class="sub-italic">(Kéo chuột ở từng ô để thay đổi công thức tùy theo khẩu vị)</span></h2>
-        <p id="uiTableHint">Nhấp giữ ô số và kéo lên để tăng, kéo xuống để giảm theo khẩu vị</p>
       </div>
       <button class="btn-copy no-print" id="btnCopy" onclick="copyList()">📋 Danh sách nguyên liệu</button>
     </div>
@@ -322,7 +320,6 @@
     sliderDesc: { vi: 'Kéo thanh trượt để tự động nhân chia toàn bộ gia vị theo tỷ lệ chuẩn', ru: 'Перемещайте ползунок для пересчета всех ингредиентов' },
     tableTitleMain: { vi: 'Bảng định lượng nguyên liệu ', ru: 'Таблица ингредиентов ' },
     tableTitleSub: { vi: '(Kéo chuột ở từng ô để thay đổi công thức tùy theo khẩu vị)', ru: '(Тяните числа в ячейках вверх/вниз для изменения рецепта по вкусу)' },
-    tableHint: { vi: 'Nhấp giữ ô số và kéo lên để tăng, kéo xuống để giảm theo khẩu vị', ru: 'Удерживайте число и тяните вверх или вниз для корректировки' },
     colIng: { vi: 'Nguyên liệu', ru: 'Ингредиент' },
     colQty: { vi: 'Định lượng (Kéo ↕)', ru: 'Вес / Объем (↕)' },
     colPrep: { vi: 'Quy cách sơ chế & Kỹ thuật', ru: 'Обработка и нарезка' },
@@ -442,7 +439,6 @@
     document.getElementById('uiSliderTitle').textContent = getTxt(UI_TEXT.sliderTitle);
     document.getElementById('uiSliderDesc').textContent = getTxt(UI_TEXT.sliderDesc);
     document.getElementById('uiTableTitle').innerHTML = getTxt(UI_TEXT.tableTitleMain) + '<span class="sub-italic">' + getTxt(UI_TEXT.tableTitleSub) + '</span>';
-    document.getElementById('uiTableHint').textContent = getTxt(UI_TEXT.tableHint);
     document.getElementById('colIng').textContent = getTxt(UI_TEXT.colIng);
     document.getElementById('colQty').textContent = getTxt(UI_TEXT.colQty);
     document.getElementById('colPrep').textContent = getTxt(UI_TEXT.colPrep);
