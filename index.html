@@ -30,7 +30,6 @@
       gap: 12px;
     }
     .header h1 { font-size: 20px; font-weight: 800; color: #0f172a; }
-    .header p { font-size: 13px; color: #64748b; margin-top: 2px; }
 
     .controls-top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     .lang-group { display: flex; background: #f1f5f9; padding: 4px; border-radius: 10px; }
@@ -157,17 +156,35 @@
     .unit-txt { font-size: 13px; font-weight: 600; color: #64748b; width: 26px; }
     .prep-txt { font-size: 13px; color: #475569; }
 
-    .steps-box { padding: 20px; }
-    .steps-box h2 { font-size: 16px; font-weight: 800; margin-bottom: 14px; color: #0f172a; }
+    .section-box { padding: 20px; }
+    .section-box h2 { font-size: 16px; font-weight: 800; margin-bottom: 14px; color: #0f172a; }
     .steps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     @media (max-width: 720px) { .steps-grid { grid-template-columns: 1fr; } }
     .step-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; }
     .step-item h3 { font-size: 12px; font-weight: 800; color: #2563eb; text-transform: uppercase; margin-bottom: 6px; }
     .step-item p { font-size: 13px; color: #334155; }
 
+    /* Notes Section */
+    .notes-list { display: flex; flex-direction: column; gap: 10px; }
+    .note-item {
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      border-radius: 0 10px 10px 0;
+      font-size: 13px;
+      color: #334155;
+    }
+    .note-item strong { color: #92400e; display: block; margin-bottom: 2px; font-size: 12px; text-transform: uppercase; }
+
+    /* Print optimization for both Mobile & Desktop */
     @media print {
       .no-print { display: none !important; }
-      body { background: #fff; padding: 0; }
+      body { background: #fff !important; padding: 0 !important; color: #000 !important; }
+      .wrap { max-width: 100%; gap: 10px; }
+      .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
+      .slider-panel { background: #f8fafc !important; color: #000 !important; border: 1px solid #ccc !important; padding: 14px; }
+      .slider-title, .kg-display, .kg-unit, .slider-desc { color: #000 !important; }
+      input[type=range], .presets { display: none !important; }
     }
   </style>
 </head>
@@ -177,14 +194,13 @@
   <div class="card header">
     <div>
       <h1 id="uiTitle">Công thức và qui trình làm kimchi</h1>
-      <p id="uiSubtitle">Kéo thanh trượt hoặc chạm giữ vào từng ô số để kéo lên/xuống tinh chỉnh định lượng</p>
     </div>
     <div class="controls-top no-print">
       <div class="lang-group">
         <button class="lang-btn active" id="btn-vi" onclick="setLang('vi')">VI</button>
         <button class="lang-btn" id="btn-ru" onclick="setLang('ru')">RU</button>
       </div>
-      <button class="btn-print" id="btnPrint" onclick="window.print()">🖨️ In phiếu</button>
+      <button class="btn-print" id="btnPrint" onclick="handlePrint()">🖨️ In phiếu</button>
     </div>
   </div>
 
@@ -211,7 +227,7 @@
         <h2 id="uiTableTitle">Bảng Nguyên Liệu Định Lượng (Có thể kéo chuột để thay đổi công thức ở từng ô)</h2>
         <p id="uiTableHint">Nhấp giữ ô số và kéo lên để tăng, kéo xuống để giảm theo khẩu vị</p>
       </div>
-      <button class="btn-copy no-print" id="btnCopy" onclick="copyList()">📋 Chép DS mua sắm</button>
+      <button class="btn-copy no-print" id="btnCopy" onclick="copyList()">📋 Danh sách nguyên liệu</button>
     </div>
     <div class="div-grid-header">
       <div id="colIng">Nguyên liệu</div>
@@ -221,9 +237,14 @@
     <div id="ingTableBody"></div>
   </div>
 
-  <div class="card steps-box">
+  <div class="card section-box">
     <h2 id="uiStepsTitle">Quy Trình Thực Hiện Chuẩn Hóa (4 Giai Đoạn)</h2>
     <div class="steps-grid" id="stepsGrid"></div>
+  </div>
+
+  <div class="card section-box">
+    <h2 id="uiNotesTitle">Ghi chú & Lưu ý quan trọng</h2>
+    <div class="notes-list" id="notesList"></div>
   </div>
 </div>
 
@@ -237,7 +258,6 @@
 
   var UI_TEXT = {
     title: { vi: 'Công thức và qui trình làm kimchi', ru: 'Рецепт и технология приготовления кимчи' },
-    subtitle: { vi: 'Kéo thanh trượt hoặc chạm giữ vào từng ô số để kéo lên/xuống tinh chỉnh định lượng', ru: 'Двигайте ползунок или тяните числа вверх/вниз для точной настройки' },
     sliderTitle: { vi: 'Khối lượng cải thảo tươi (Nguyên liệu gốc)', ru: 'Вес свежей пекинской капусты (База)' },
     sliderDesc: { vi: 'Kéo thanh trượt để tự động nhân chia toàn bộ gia vị theo tỷ lệ chuẩn', ru: 'Перемещайте ползунок для пересчета всех ингредиентов' },
     tableTitle: { vi: 'Bảng Nguyên Liệu Định Lượng (Có thể kéo chuột để thay đổi công thức ở từng ô)', ru: 'Таблица ингредиентов (Можно тянуть числа мышью для изменения количества)' },
@@ -246,13 +266,14 @@
     colQty: { vi: 'Định lượng (Kéo ↕)', ru: 'Вес / Объем (↕)' },
     colPrep: { vi: 'Quy cách sơ chế & Kỹ thuật', ru: 'Обработка и нарезка' },
     stepsTitle: { vi: 'Quy Trình Thực Hiện Chuẩn Hóa (4 Giai Đoạn)', ru: 'Пошаговая технология (4 этапа)' },
+    notesTitle: { vi: 'Ghi chú & Lưu ý quan trọng', ru: 'Примечания и важные советы' },
     resetBtn: { vi: 'Đặt lại tỷ lệ gốc', ru: 'Сбросить ручные правки' },
-    copyBtn: { vi: '📋 Chép DS mua sắm', ru: '📋 Копировать список' },
+    copyBtn: { vi: '📋 Danh sách nguyên liệu', ru: '📋 Список ингредиентов' },
     printBtn: { vi: '🖨️ In phiếu', ru: '🖨️ Печать' }
   };
 
   var RECIPE = {
-    name: { vi: 'Công thức làm kimchi cải thảo', ru: 'Рецепт кимчи из пекинской капусты' },
+    name: { vi: 'Công thức và qui trình làm kimchi', ru: 'Рецепт и технология приготовления кимчи' },
     items: [
       { group: { vi: 'Ướp muối', ru: 'Засолка' }, name: { vi: 'Muối biển hạt thô', ru: 'Морская соль крупная' }, perKg: 66.7, step: 5, dec: 0, unit: 'g', prep: { vi: 'Xát đều từng bẹ lá, tập trung 80% ở cuống trắng', ru: 'Натереть листья, 80% соли у основания' } },
       { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Bột gạo nếp (Mochiko)', ru: 'Клейкая рисовая мука' }, perKg: 7.4, step: 0.5, dec: 1, unit: 'g', prep: { vi: 'Hòa nước lạnh, đun sôi lăn tăn 10 phút', ru: 'Развести в воде, варить 10 мин' } },
@@ -296,6 +317,29 @@
           ru: 'Равномерно промазать приготовленной пастой каждый лист от середины к краям, аккуратно свернуть и плотно уложить в герметичный контейнер. Оставить для ферментации при комнатной температуре на 24–36 часов до появления легких пузырьков, затем убрать в холодильник.'
         }
       }
+    ],
+    notes: [
+      {
+        label: { vi: 'Cảnh báo chọn muối & Nhiệt độ hồ nếp', ru: 'Выбор соли и температура клейстера' },
+        text: {
+          vi: 'Tuyệt đối dùng muối biển hạt thô không i-ốt (muối i-ốt sẽ làm cải bị nhũn và đắng). Bắt buộc để hồ nếp nguội hoàn toàn 100% mới trộn ớt bột và rau thơm để không làm chín tái rau và giữ màu đỏ tươi.',
+          ru: 'Используйте только крупную морскую соль без йода (йодированная соль размягчает капусту). Обязательно полностью остудите клейстер перед добавлением перца и зелени, чтобы сохранить свежий вкус и яркий цвет.'
+        }
+      },
+      {
+        label: { vi: 'Kiểm soát ủ muối & Lên men kỵ khí', ru: 'Контроль засолки и анаэробной ферментации' },
+        text: {
+          vi: 'Trong 2 giờ ướp muối nên lật đảo mặt cải mỗi 30 phút; cải đạt chuẩn khi bẹ uốn cong dẻo như cao su mà không gãy. Khi xếp vào hộp phải nén chặt tay để đẩy hết túi khí ra ngoài, tránh làm cải bị úa mốc.',
+          ru: 'Во время 2-часовой засолки переворачивайте капусту каждые 30 минут; листья должны гибко сгибаться без треска. При укладке в контейнер плотно прижимайте капусту, вытесняя воздух.'
+        }
+      },
+      {
+        label: { vi: 'Bảo quản & Tận dụng nước cốt', ru: 'Хранение и использование рассола' },
+        text: {
+          vi: 'Bảo quản ngăn mát tủ lạnh (2–4°C) dùng ngon trong 2–4 tháng. Luôn dùng đũa sạch khi gắp và ấn phần cải còn lại ngập dưới mặt nước sốt. Không đổ bỏ nước kimchi chua vì dùng nấu canh Kimchi-jjigae rất ngon.',
+          ru: 'Хранить в холодильнике (2–4°C) до 2–4 месяцев. Используйте чистые приборы и прижимайте остаток под слой сока. Не выливайте кислый рассол — он идеален для супа Кимчи-тиге.'
+        }
+      }
     ]
   };
 
@@ -334,7 +378,6 @@
 
   function renderAll() {
     document.getElementById('uiTitle').textContent = getTxt(UI_TEXT.title);
-    document.getElementById('uiSubtitle').textContent = getTxt(UI_TEXT.subtitle);
     document.getElementById('uiSliderTitle').textContent = getTxt(UI_TEXT.sliderTitle);
     document.getElementById('uiSliderDesc').textContent = getTxt(UI_TEXT.sliderDesc);
     document.getElementById('uiTableTitle').textContent = getTxt(UI_TEXT.tableTitle);
@@ -343,6 +386,7 @@
     document.getElementById('colQty').textContent = getTxt(UI_TEXT.colQty);
     document.getElementById('colPrep').textContent = getTxt(UI_TEXT.colPrep);
     document.getElementById('uiStepsTitle').textContent = getTxt(UI_TEXT.stepsTitle);
+    document.getElementById('uiNotesTitle').textContent = getTxt(UI_TEXT.notesTitle);
     document.getElementById('uiResetBtn').textContent = getTxt(UI_TEXT.resetBtn);
     document.getElementById('btnCopy').textContent = getTxt(UI_TEXT.copyBtn);
     document.getElementById('btnPrint').textContent = getTxt(UI_TEXT.printBtn);
@@ -377,6 +421,13 @@
       stepsHtml += '<div class="step-item"><h3>' + getTxt(s.title) + '</h3><p>' + getTxt(s.desc) + '</p></div>';
     }
     document.getElementById('stepsGrid').innerHTML = stepsHtml;
+
+    var notesHtml = '';
+    for (var k = 0; k < RECIPE.notes.length; k++) {
+      var nt = RECIPE.notes[k];
+      notesHtml += '<div class="note-item"><strong>' + getTxt(nt.label) + '</strong>' + getTxt(nt.text) + '</div>';
+    }
+    document.getElementById('notesList').innerHTML = notesHtml;
   }
 
   function setKg(val) {
@@ -434,10 +485,32 @@
     var lines = currentItems.map(function(i) {
       return '- ' + getTxt(i.name) + ': ' + fmt(i.val, i.dec) + ' ' + i.unit;
     });
-    navigator.clipboard.writeText(header + '\n' + lines.join('\n'));
+    var textToCopy = header + '\n' + lines.join('\n');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = textToCopy;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    }
     var btn = document.getElementById('btnCopy');
     btn.textContent = lang === 'ru' ? '✅ Скопировано!' : '✅ Đã chép danh sách!';
     setTimeout(function() { btn.textContent = getTxt(UI_TEXT.copyBtn); }, 2000);
+  }
+
+  function handlePrint() {
+    var ua = navigator.userAgent || '';
+    var isInApp = /Zalo|FBAN|FBAV|Instagram|Telegram/i.test(ua);
+    if (isInApp) {
+      alert(lang === 'ru'
+        ? 'Откройте страницу в Safari или Chrome (кнопка ⋮ / Поделиться -> Открыть в браузере), чтобы сохранить PDF или распечатать.'
+        : 'Bạn đang mở trong ứng dụng chat (Zalo/Messenger). Hãy bấm dấu 3 chấm (⋮) hoặc nút Chia sẻ -> chọn "Mở bằng trình duyệt" (Safari/Chrome) để in hoặc lưu file PDF!');
+    } else {
+      window.print();
+    }
   }
 
   recalculateAll();
