@@ -101,7 +101,8 @@
       gap: 10px;
     }
     .table-head-bar h2 { font-size: 16px; font-weight: 800; color: #0f172a; }
-    .table-head-bar p { font-size: 12px; color: #64748b; }
+    .table-head-bar h2 .sub-italic { font-weight: 400; font-style: italic; font-size: 14px; color: #475569; }
+    .table-head-bar p { font-size: 12px; color: #64748b; margin-top: 2px; }
     .btn-copy {
       background: #2563eb;
       color: #fff;
@@ -176,9 +177,55 @@
     }
     .note-item strong { color: #92400e; display: block; margin-bottom: 2px; font-size: 12px; text-transform: uppercase; }
 
+    /* Mobile Print Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      z-index: 9999;
+      padding: 16px;
+      overflow-y: auto;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-card {
+      background: #fff;
+      max-width: 520px;
+      width: 100%;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .modal-card h3 { font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+    .modal-card p { font-size: 13px; color: #475569; margin-bottom: 14px; line-height: 1.5; }
+    .modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-modal-primary {
+      flex: 1;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-modal-close {
+      background: #f1f5f9;
+      color: #334155;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     /* Print optimization for both Mobile & Desktop */
     @media print {
-      .no-print { display: none !important; }
+      .no-print, .modal-backdrop { display: none !important; }
       body { background: #fff !important; padding: 0 !important; color: #000 !important; }
       .wrap { max-width: 100%; gap: 10px; }
       .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; }
@@ -224,7 +271,7 @@
   <div class="card">
     <div class="table-head-bar">
       <div>
-        <h2 id="uiTableTitle">Bảng Nguyên Liệu Định Lượng (Có thể kéo chuột để thay đổi công thức ở từng ô)</h2>
+        <h2 id="uiTableTitle">Bảng định lượng nguyên liệu <span class="sub-italic">(Kéo chuột ở từng ô để thay đổi công thức tùy theo khẩu vị)</span></h2>
         <p id="uiTableHint">Nhấp giữ ô số và kéo lên để tăng, kéo xuống để giảm theo khẩu vị</p>
       </div>
       <button class="btn-copy no-print" id="btnCopy" onclick="copyList()">📋 Danh sách nguyên liệu</button>
@@ -248,6 +295,19 @@
   </div>
 </div>
 
+<!-- Mobile Print Helper Modal -->
+<div class="modal-backdrop no-print" id="printModal" onclick="if(event.target===this) closePrintModal()">
+  <div class="modal-card">
+    <h3 id="modalPrintTitle">🖨️ Lưu PDF / In phiếu trên điện thoại</h3>
+    <p id="modalPrintDesc">Nếu trình duyệt trên điện thoại chưa tự mở bảng in, bạn có thể bấm nút <b>Mở hộp thoại In / Lưu PDF</b> bên dưới, hoặc bấm biểu tượng <b>Chia sẻ (Share) / Dấu 3 chấm (⋮)</b> trên thanh trình duyệt và chọn <b>In (Print)</b>.</p>
+    <div class="modal-actions">
+      <button class="btn-modal-primary" id="btnTriggerNativePrint" onclick="triggerNativePrint()">Mở hộp thoại In / Lưu PDF</button>
+      <button class="btn-modal-primary" style="background:#0f172a;" id="btnCopyFullRecipe" onclick="copyFullRecipeForPrint()">📋 Chép toàn bộ phiếu</button>
+      <button class="btn-modal-close" id="btnCloseModal" onclick="closePrintModal()">Đóng</button>
+    </div>
+  </div>
+</div>
+
 <script>
   var lang = 'vi';
   var cabbageKg = 2.7;
@@ -260,7 +320,8 @@
     title: { vi: 'Công thức và qui trình làm kimchi', ru: 'Рецепт и технология приготовления кимчи' },
     sliderTitle: { vi: 'Khối lượng cải thảo tươi (Nguyên liệu gốc)', ru: 'Вес свежей пекинской капусты (База)' },
     sliderDesc: { vi: 'Kéo thanh trượt để tự động nhân chia toàn bộ gia vị theo tỷ lệ chuẩn', ru: 'Перемещайте ползунок для пересчета всех ингредиентов' },
-    tableTitle: { vi: 'Bảng Nguyên Liệu Định Lượng (Có thể kéo chuột để thay đổi công thức ở từng ô)', ru: 'Таблица ингредиентов (Можно тянуть числа мышью для изменения количества)' },
+    tableTitleMain: { vi: 'Bảng định lượng nguyên liệu ', ru: 'Таблица ингредиентов ' },
+    tableTitleSub: { vi: '(Kéo chuột ở từng ô để thay đổi công thức tùy theo khẩu vị)', ru: '(Тяните числа в ячейках вверх/вниз для изменения рецепта по вкусу)' },
     tableHint: { vi: 'Nhấp giữ ô số và kéo lên để tăng, kéo xuống để giảm theo khẩu vị', ru: 'Удерживайте число и тяните вверх или вниз для корректировки' },
     colIng: { vi: 'Nguyên liệu', ru: 'Ингредиент' },
     colQty: { vi: 'Định lượng (Kéo ↕)', ru: 'Вес / Объем (↕)' },
@@ -380,7 +441,7 @@
     document.getElementById('uiTitle').textContent = getTxt(UI_TEXT.title);
     document.getElementById('uiSliderTitle').textContent = getTxt(UI_TEXT.sliderTitle);
     document.getElementById('uiSliderDesc').textContent = getTxt(UI_TEXT.sliderDesc);
-    document.getElementById('uiTableTitle').textContent = getTxt(UI_TEXT.tableTitle);
+    document.getElementById('uiTableTitle').innerHTML = getTxt(UI_TEXT.tableTitleMain) + '<span class="sub-italic">' + getTxt(UI_TEXT.tableTitleSub) + '</span>';
     document.getElementById('uiTableHint').textContent = getTxt(UI_TEXT.tableHint);
     document.getElementById('colIng').textContent = getTxt(UI_TEXT.colIng);
     document.getElementById('colQty').textContent = getTxt(UI_TEXT.colQty);
@@ -480,37 +541,81 @@
   window.addEventListener('mouseup', endScrub);
   window.addEventListener('touchend', endScrub);
 
+  function copyString(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(function() { fallbackCopy(text); });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
   function copyList() {
     var header = getTxt(RECIPE.name) + ' (' + cabbageKg.toFixed(1) + ' kg)';
     var lines = currentItems.map(function(i) {
       return '- ' + getTxt(i.name) + ': ' + fmt(i.val, i.dec) + ' ' + i.unit;
     });
-    var textToCopy = header + '\n' + lines.join('\n');
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(textToCopy);
-    } else {
-      var ta = document.createElement('textarea');
-      ta.value = textToCopy;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-    }
+    copyString(header + '\n' + lines.join('\n'));
     var btn = document.getElementById('btnCopy');
     btn.textContent = lang === 'ru' ? '✅ Скопировано!' : '✅ Đã chép danh sách!';
     setTimeout(function() { btn.textContent = getTxt(UI_TEXT.copyBtn); }, 2000);
   }
 
+  function copyFullRecipeForPrint() {
+    var title = getTxt(RECIPE.name) + ' (' + cabbageKg.toFixed(1) + ' kg Cải thảo)';
+    var ings = currentItems.map(function(i) {
+      return '• ' + getTxt(i.name) + ': ' + fmt(i.val, i.dec) + ' ' + i.unit + ' (' + getTxt(i.prep) + ')';
+    }).join('\n');
+    var steps = RECIPE.steps.map(function(s) {
+      return getTxt(s.title) + '\n' + getTxt(s.desc);
+    }).join('\n\n');
+    copyString(title + '\n\n--- NGUYÊN LIỆU ---\n' + ings + '\n\n--- QUY TRÌNH ---\n' + steps);
+    var btn = document.getElementById('btnCopyFullRecipe');
+    btn.textContent = lang === 'ru' ? '✅ Скопировано!' : '✅ Đã chép toàn bộ!';
+    setTimeout(function() {
+      btn.textContent = lang === 'ru' ? '📋 Скопировать весь рецепт' : '📋 Chép toàn bộ phiếu';
+    }, 2000);
+  }
+
   function handlePrint() {
     var ua = navigator.userAgent || '';
-    var isInApp = /Zalo|FBAN|FBAV|Instagram|Telegram/i.test(ua);
-    if (isInApp) {
-      alert(lang === 'ru'
-        ? 'Откройте страницу в Safari или Chrome (кнопка ⋮ / Поделиться -> Открыть в браузере), чтобы сохранить PDF или распечатать.'
-        : 'Bạn đang mở trong ứng dụng chat (Zalo/Messenger). Hãy bấm dấu 3 chấm (⋮) hoặc nút Chia sẻ -> chọn "Mở bằng trình duyệt" (Safari/Chrome) để in hoặc lưu file PDF!');
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    if (isMobile) {
+      document.getElementById('modalPrintTitle').textContent = lang === 'ru'
+        ? '🖨️ Печать / Сохранить в PDF на телефоне'
+        : '🖨️ In phiếu / Lưu PDF trên điện thoại';
+      document.getElementById('modalPrintDesc').innerHTML = lang === 'ru'
+        ? 'Нажмите <b>Открыть печать / PDF</b> ниже. Если вы открыли ссылку внутри Zalo/Messenger, нажмите меню <b>⋮ / Поделиться</b> в браузере и выберите <b>Открыть в Safari/Chrome</b> или <b>Печать</b>.'
+        : 'Bấm nút <b>Mở hộp thoại In / Lưu PDF</b> bên dưới. Nếu đang mở link trong Zalo/Messenger, hãy bấm biểu tượng <b>Chia sẻ / Dấu 3 chấm (⋮)</b> và chọn <b>Mở bằng Safari/Chrome</b> hoặc <b>In (Print)</b>.';
+      document.getElementById('btnTriggerNativePrint').textContent = lang === 'ru' ? 'Открыть печать / PDF' : 'Mở hộp thoại In / Lưu PDF';
+      document.getElementById('btnCopyFullRecipe').textContent = lang === 'ru' ? '📋 Скопировать весь рецепт' : '📋 Chép toàn bộ phiếu';
+      document.getElementById('btnCloseModal').textContent = lang === 'ru' ? 'Закрыть' : 'Đóng';
+      document.getElementById('printModal').classList.add('open');
     } else {
       window.print();
     }
+  }
+
+  function triggerNativePrint() {
+    closePrintModal();
+    setTimeout(function() {
+      window.print();
+    }, 250);
+  }
+
+  function closePrintModal() {
+    document.getElementById('printModal').classList.remove('open');
   }
 
   recalculateAll();
