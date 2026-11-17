@@ -3,195 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hệ Thống Định Lượng & Quy Trình Kimchi Chuẩn Hóa (VI / RU)</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <title>Bảng Định Lượng & Quy Trình Kimchi Chuẩn Hóa (VI / RU)</title>
   <style>
-    input[type=range]::-webkit-slider-thumb {
-      appearance: none;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: #f59e0b;
+    :root {
+      --navy: #0f172a;
+      --slate: #1e293b;
+      --blue: #2563eb;
+      --blue-soft: #eff6ff;
+      --amber: #f59e0b;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 16px 12px 48px;
+      line-height: 1.5;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+    /* Card */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      padding: 20px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: #ffe4e6;
+      color: #be123c;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .header h1 { font-size: 20px; font-weight: 800; color: var(--navy); }
+    .header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    .controls-top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .lang-group { display: flex; background: #f1f5f9; padding: 4px; border-radius: 10px; }
+    .lang-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      border-radius: 7px;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
-      transition: 0.15s;
     }
-    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-    .scrub-num {
-      cursor: ns-resize;
-      user-select: none;
-      touch-action: none;
+    .lang-btn.active { background: #fff; color: var(--blue); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .btn-action {
+      border: 1px solid var(--border);
+      background: var(--navy);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
     }
-    @media print {
-      .no-print { display: none !important; }
-      body { background: white !important; color: black !important; padding: 0 !important; }
+    .btn-action:hover { opacity: 0.9; }
+
+    /* Recipe Tabs */
+    .recipe-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 720px) { .recipe-tabs { grid-template-columns: 1fr; } }
+    .rec-btn {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s;
     }
-  </style>
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased p-3 md:p-8" x-data="kimchiSystem()">
+    .rec-btn:hover { border-color: #93c5fd; }
+    .rec-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .rec-tag { font-size: 11px; font-weight: 800; color: var(--blue); text-transform: uppercase; }
+    .rec-btn.active .rec-tag { color: var(--amber); }
+    .rec-name { font-size: 14px; font-weight: 700; margin-top: 3px; }
+    .rec-sub { font-size: 12px; opacity: 0.75; margin-top: 4px; }
 
-  <div class="max-w-5xl mx-auto space-y-6">
+    /* Master Slider */
+    .slider-panel {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #fff;
+      padding: 24px;
+      border-radius: 16px;
+    }
+    .slider-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+    .slider-title { font-size: 12px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.05em; }
+    .slider-desc { font-size: 13px; color: #cbd5e1; margin-top: 2px; }
+    .kg-display { font-size: 42px; font-weight: 900; color: #fbbf24; font-family: ui-monospace, monospace; line-height: 1; }
+    .kg-unit { font-size: 18px; color: #e2e8f0; font-weight: 700; margin-left: 4px; }
 
-    <!-- HEADER & CHUYỂN NGÔN NGỮ -->
-    <header class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <div class="flex flex-wrap items-center gap-2 mb-1.5">
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700">K-FOOD TECH SPEC</span>
-          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600" x-text="t('badge')"></span>
-        </div>
-        <h1 class="text-xl md:text-2xl font-extrabold text-slate-900" x-text="t('title')"></h1>
-        <p class="text-xs md:text-sm text-slate-500 mt-1" x-text="t('subtitle')"></p>
-      </div>
+    input[type=range] {
+      width: 100%;
+      margin: 18px 0 12px;
+      height: 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      outline: none;
+      cursor: pointer;
+      accent-color: #f59e0b;
+    }
+    .presets { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.12); }
+    .preset-list { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .preset-btn {
+      background: rgba(255,255,255,0.12);
+      border: none;
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-family: ui-monospace, monospace;
+      cursor: pointer;
+    }
+    .preset-btn.active { background: #fbbf24; color: #0f172a; font-weight: 800; }
+    .reset-link { background: none; border: none; color: #93c5fd; font-size: 12px; text-decoration: underline; cursor: pointer; }
 
-      <div class="flex items-center gap-2.5 no-print">
-        <div class="bg-slate-100 p-1 rounded-xl flex">
-          <button @click="lang = 'vi'" :class="lang === 'vi' ? 'bg-white shadow text-blue-600 font-bold' : 'text-slate-600'" class="px-3 py-1.5 rounded-lg text-xs transition">Tiếng Việt</button>
-          <button @click="lang = 'ru'" :class="lang === 'ru' ? 'bg-white shadow text-blue-600 font-bold' : 'text-slate-600'" class="px-3 py-1.5 rounded-lg text-xs transition">Русский</button>
-          <button @click="lang = 'both'" :class="lang === 'both' ? 'bg-white shadow text-blue-600 font-bold' : 'text-slate-600'" class="px-3 py-1.5 rounded-lg text-xs transition">VI + RU</button>
-        </div>
-        <button onclick="window.print()" class="px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-semibold shadow transition">
-          🖨️ <span x-text="lang === 'ru' ? 'Печать' : 'In phiếu'"></span>
-        </button>
-      </div>
-    </header>
+    /* Metadata Grid */
+    .meta-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 720px) { .meta-grid { grid-template-columns: repeat(2, 1fr); } }
+    .meta-box { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .meta-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+    .meta-val { font-size: 16px; font-weight: 800; color: var(--navy); margin-top: 4px; }
 
-    <!-- CHỌN 1 TRONG 3 PHƯƠNG PHÁP ĐẦU BẾP -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-3 no-print">
-      <template x-for="(rec, key) in recipes" :key="key">
-        <button @click="selectRecipe(key)"
-                :class="activeRecipe === key ? 'bg-slate-900 text-white border-slate-900 shadow-md' : 'bg-white text-slate-700 border-slate-200 hover:border-blue-400'"
-                class="p-4 rounded-xl border text-left transition flex flex-col justify-between">
-          <div>
-            <div class="text-[11px] uppercase font-bold tracking-wider" :class="activeRecipe === key ? 'text-amber-400' : 'text-blue-600'" x-text="rec.tag"></div>
-            <div class="font-bold text-sm mt-0.5" x-text="getText(rec.name)"></div>
-          </div>
-          <div class="text-xs mt-2 opacity-80" x-text="getText(rec.style)"></div>
-        </button>
-      </template>
-    </section>
+    /* Div Table */
+    .table-head-bar {
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .table-head-bar h2 { font-size: 16px; font-weight: 800; color: var(--navy); }
+    .table-head-bar p { font-size: 12px; color: var(--muted); }
+    .btn-copy {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-    <!-- THANH TRƯỢT TRỌNG TÂM (MASTER SLIDER) -->
-    <section class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white rounded-2xl p-6 md:p-7 shadow-xl">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
-        <div>
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-400" x-text="t('sliderTitle')"></span>
-          <p class="text-xs text-slate-300 mt-0.5" x-text="t('sliderHint')"></p>
-        </div>
-        <div class="flex items-baseline gap-2">
-          <span class="text-4xl md:text-5xl font-black text-amber-400 font-mono" x-text="cabbageKg.toFixed(1)"></span>
-          <span class="text-lg font-bold text-slate-300">kg</span>
-        </div>
-      </div>
-
-      <input type="range" min="0.5" max="15.0" step="0.1" x-model.number="cabbageKg" @input="recalculateAll()" class="w-full h-2.5 bg-slate-700 rounded-lg appearance-none cursor-pointer">
-      
-      <div class="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-slate-800 no-print">
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span class="text-xs text-slate-400 mr-1" x-text="lang === 'ru' ? 'Стандартные партии:' : 'Mốc chuẩn:'"></span>
-          <template x-for="preset in [1.0, 2.7, 3.5, 5.0, 7.0]" :key="preset">
-            <button @click="cabbageKg = preset; recalculateAll()"
-                    :class="cabbageKg === preset ? 'bg-amber-400 text-slate-900 font-bold' : 'bg-slate-800 hover:bg-slate-700 text-slate-200'"
-                    class="px-2.5 py-1 rounded-lg text-xs font-mono transition" x-text="preset.toFixed(1) + ' kg'"></button>
-          </template>
-        </div>
-        <button @click="recalculateAll()" class="text-xs text-blue-300 hover:text-white underline" x-text="lang === 'ru' ? 'Сбросить ручные правки' : 'Đặt lại tỷ lệ gốc'"></button>
-      </div>
-    </section>
-
-    <!-- THÔNG SỐ NHANH (METADATA) -->
-    <section class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <div class="bg-white p-4 rounded-xl border border-slate-200">
-        <span class="text-[11px] font-bold text-slate-400 uppercase block" x-text="lang === 'ru' ? 'Порций' : 'Khẩu phần'"></span>
-        <span class="text-lg font-extrabold text-slate-800 mt-0.5 block" x-text="Math.round(cabbageKg * 2.5) + (lang === 'ru' ? ' порц.' : ' phần ăn')"></span>
-      </div>
-      <div class="bg-white p-4 rounded-xl border border-slate-200">
-        <span class="text-[11px] font-bold text-slate-400 uppercase block" x-text="lang === 'ru' ? 'Время засолки' : 'Thời gian ướp muối'"></span>
-        <span class="text-lg font-extrabold text-blue-600 mt-0.5 block" x-text="getText(currentRecipe().saltTime)"></span>
-      </div>
-      <div class="bg-white p-4 rounded-xl border border-slate-200">
-        <span class="text-[11px] font-bold text-slate-400 uppercase block" x-text="lang === 'ru' ? 'Ферментация' : 'Thời gian ủ chua'"></span>
-        <span class="text-lg font-extrabold text-amber-600 mt-0.5 block" x-text="getText(currentRecipe().fermentTime)"></span>
-      </div>
-      <div class="bg-white p-4 rounded-xl border border-slate-200">
-        <span class="text-[11px] font-bold text-slate-400 uppercase block" x-text="lang === 'ru' ? 'Объем тары' : 'Dung tích hũ chứa'"></span>
-        <span class="text-lg font-extrabold text-slate-800 mt-0.5 block" x-text="(cabbageKg * 1.6).toFixed(1) + ' L'"></span>
-      </div>
-    </section>
-
-    <!-- BẢNG NGUYÊN LIỆU DẠNG DIV (KÉO SỐ TRỰC TIẾP) -->
-    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-      <div class="p-4 md:p-5 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div>
-          <h2 class="font-bold text-base text-slate-900" x-text="t('matrixTitle')"></h2>
-          <p class="text-xs text-slate-500" x-text="t('matrixHint')"></p>
-        </div>
-        <button @click="copyShoppingList()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm transition no-print self-start">
-          📋 <span x-text="copied ? (lang === 'ru' ? 'Скопировано!' : 'Đã chép!') : (lang === 'ru' ? 'Копировать список' : 'Chép DS mua sắm')"></span>
-        </button>
-      </div>
-
-      <!-- Header Bảng Div -->
-      <div class="grid grid-cols-12 bg-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-500 py-3 px-4 border-b border-slate-200">
-        <div class="col-span-5 md:col-span-4" x-text="lang === 'ru' ? 'Ингредиент' : 'Nguyên liệu'"></div>
-        <div class="col-span-4 md:col-span-3 text-center" x-text="lang === 'ru' ? 'Вес (тяните ↕)' : 'Định lượng (Kéo ↕)'"></div>
-        <div class="col-span-3 md:col-span-5" x-text="lang === 'ru' ? 'Обработка / Нарезка' : 'Quy cách sơ chế'"></div>
-      </div>
-
-      <!-- Các dòng nguyên liệu dạng Div -->
-      <div class="divide-y divide-slate-100">
-        <template x-for="(item, index) in activeItems" :key="index">
-          <div class="grid grid-cols-12 items-center py-3 px-4 hover:bg-slate-50 transition">
-            <div class="col-span-5 md:col-span-4 pr-2">
-              <div class="font-bold text-sm text-slate-800" x-text="getText(item.name)"></div>
-              <span class="inline-block text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 mt-0.5" x-text="getText(item.group)"></span>
-            </div>
-
-            <div class="col-span-4 md:col-span-3 flex items-center justify-center gap-1.5">
-              <div @mousedown="startScrub($event, index)"
-                   @touchstart.prevent="startScrub($event, index)"
-                   @wheel.prevent="wheelScrub($event, index)"
-                   :class="scrubIndex === index ? 'bg-blue-600 text-white border-blue-600 scale-105' : 'bg-blue-50/70 text-blue-700 border-blue-200 hover:border-blue-500'"
-                   class="scrub-num min-w-[72px] text-center py-1.5 px-2.5 rounded-lg border font-mono font-bold text-sm transition">
-                <span x-text="formatVal(item.currentVal, item.decimals)"></span>
-              </div>
-              <span class="text-xs font-semibold text-slate-500 w-7" x-text="item.unit"></span>
-            </div>
-
-            <div class="col-span-3 md:col-span-5 text-xs text-slate-600" x-text="getText(item.prep)"></div>
-          </div>
-        </template>
-      </div>
-    </section>
-
-    <!-- QUY TRÌNH 4 GIAI ĐOẠN -->
-    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6 space-y-4">
-      <h2 class="font-bold text-base text-slate-900" x-text="lang === 'ru' ? 'Пошаговая технология (4 этапа)' : 'Quy trình thực hiện chuẩn hóa (4 Giai đoạn)'"></h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <template x-for="(step, idx) in currentRecipe().steps" :key="idx">
-          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
-            <div class="font-bold text-xs uppercase tracking-wider text-blue-700 mb-1" x-text="getText(step.title)"></div>
-            <p class="text-xs md:text-sm text-slate-700 leading-relaxed" x-text="getText(step.desc)"></p>
-          </div>
-        </template>
-      </div>
-    </section>
-
-  </div>
-
-  <script>
-    function kimchiSystem() {
-      return {
-        lang: 'vi',
-        activeRecipe: 'maangchi',
-        cabbageKg: 2.7,
-        activeItems: [],
-        scrubIndex: null,
-        startY: 0,
-        startVal: 0,
-        copied: false,
-
-        ui: {
-          badge: { vi: 'Bảng Tính Tương Tác Độc Lập', ru: 'Интерактивный калькулятор' },
-          title: { vi: 'Bảng Định Lượng & Quy Trình Kimchi Chuẩn Hóa', ru: 'Технологическая карта: Кимчи из пекинской капусты' },
-          subtitle: { vi: 'T
+    .div-grid-header, .div-grid-row {
+      display: grid;
+      grid-template-columns: 2.2fr 1.2fr 2.4fr;
+      align-items: center;
+      padding: 12px
