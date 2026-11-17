@@ -134,4 +134,414 @@
       flex-wrap: wrap;
       gap: 10px;
     }
-    .table-head-bar h2 { font-size: 16px; font-weight: 800;
+    .table-head-bar h2 { font-size: 16px; font-weight: 800; color: #0f172a; }
+    .table-head-bar p { font-size: 12px; color: #64748b; }
+    .btn-copy {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .div-grid-header, .div-grid-row {
+      display: grid;
+      grid-template-columns: 2.2fr 1.2fr 2.4fr;
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 1px solid #e2e8f0;
+      gap: 10px;
+    }
+    .div-grid-header {
+      background: #f1f5f9;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+    .div-grid-row:hover { background: #f8fafc; }
+    @media (max-width: 640px) {
+      .div-grid-header, .div-grid-row { grid-template-columns: 1.6fr 1.1fr; padding: 12px 14px; }
+      .col-prep { grid-column: 1 / -1; font-size: 12px; color: #64748b; padding-top: 2px; }
+    }
+
+    .ing-title { font-weight: 700; font-size: 14px; color: #0f172a; }
+    .ing-tag { display: inline-block; font-size: 11px; background: #f1f5f9; color: #64748b; padding: 1px 7px; border-radius: 5px; margin-top: 3px; }
+    .val-cell { display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .scrub-box {
+      min-width: 76px;
+      text-align: center;
+      padding: 6px 10px;
+      background: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 15px;
+      font-weight: 800;
+      color: #2563eb;
+      cursor: ns-resize;
+      user-select: none;
+      touch-action: none;
+    }
+    .scrub-box.active { background: #2563eb; color: #fff; border-color: #2563eb; transform: scale(1.06); }
+    .unit-txt { font-size: 13px; font-weight: 600; color: #64748b; width: 26px; }
+    .prep-txt { font-size: 13px; color: #475569; }
+
+    .steps-box { padding: 20px; }
+    .steps-box h2 { font-size: 16px; font-weight: 800; margin-bottom: 14px; color: #0f172a; }
+    .steps-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    @media (max-width: 720px) { .steps-grid { grid-template-columns: 1fr; } }
+    .step-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; }
+    .step-item h3 { font-size: 12px; font-weight: 800; color: #2563eb; text-transform: uppercase; margin-bottom: 6px; }
+    .step-item p { font-size: 13px; color: #334155; }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="card header">
+    <div>
+      <span class="badge">K-FOOD TECH SPEC • VI / RU</span>
+      <h1 id="uiTitle">Bảng Định Lượng & Quy Trình Kimchi Chuẩn Hóa</h1>
+      <p id="uiSubtitle">Kéo thanh trượt hoặc chạm giữ vào từng ô số để kéo lên/xuống tinh chỉnh định lượng</p>
+    </div>
+    <div class="controls-top">
+      <div class="lang-group">
+        <button class="lang-btn active" id="btn-vi" onclick="setLang('vi')">Tiếng Việt</button>
+        <button class="lang-btn" id="btn-ru" onclick="setLang('ru')">Русский</button>
+        <button class="lang-btn" id="btn-both" onclick="setLang('both')">VI + RU</button>
+      </div>
+      <button class="btn-print" onclick="window.print()">🖨️ In phiếu</button>
+    </div>
+  </div>
+
+  <div class="recipe-tabs" id="recipeTabs"></div>
+
+  <div class="slider-panel">
+    <div class="slider-top">
+      <div>
+        <div class="slider-title" id="uiSliderTitle">Khối lượng cải thảo tươi (Nguyên liệu gốc)</div>
+        <div class="slider-desc" id="uiSliderDesc">Kéo thanh trượt để tự động nhân chia toàn bộ gia vị theo tỷ lệ chuẩn</div>
+      </div>
+      <div>
+        <span class="kg-display" id="kgDisplay">2.7</span><span class="kg-unit">kg</span>
+      </div>
+    </div>
+    <input type="range" id="masterSlider" min="0.5" max="15.0" step="0.1" value="2.7">
+    <div class="presets">
+      <div class="preset-list" id="presetList"></div>
+      <button class="reset-link" id="uiResetBtn" onclick="recalculateAll()">Đặt lại tỷ lệ gốc</button>
+    </div>
+  </div>
+
+  <div class="meta-grid" id="metaGrid"></div>
+
+  <div class="card">
+    <div class="table-head-bar">
+      <div>
+        <h2 id="uiTableTitle">Bảng Nguyên Liệu Định Lượng (Kéo chuột / vuốt lên xuống trên ô số)</h2>
+        <p id="uiTableHint">Nhấp giữ ô số và kéo lên để tăng, kéo xuống để giảm theo khẩu vị</p>
+      </div>
+      <button class="btn-copy" id="btnCopy" onclick="copyList()">📋 Chép DS mua sắm</button>
+    </div>
+    <div class="div-grid-header">
+      <div id="colIng">Nguyên liệu</div>
+      <div style="text-align:center;" id="colQty">Định lượng (Kéo ↕)</div>
+      <div class="col-prep" id="colPrep">Quy cách sơ chế & Kỹ thuật</div>
+    </div>
+    <div id="ingTableBody"></div>
+  </div>
+
+  <div class="card steps-box">
+    <h2 id="uiStepsTitle">Quy Trình Thực Hiện Chuẩn Hóa (4 Giai Đoạn)</h2>
+    <div class="steps-grid" id="stepsGrid"></div>
+  </div>
+</div>
+
+<script>
+  var lang = 'vi';
+  var activeRecipeKey = 'maangchi';
+  var cabbageKg = 2.7;
+  var currentItems = [];
+  var scrubIdx = null;
+  var startY = 0;
+  var startVal = 0;
+
+  var UI_TEXT = {
+    title: { vi: 'Bảng Định Lượng & Quy Trình Kimchi Chuẩn Hóa', ru: 'Технологическая карта: Кимчи из пекинской капусты' },
+    subtitle: { vi: 'Kéo thanh trượt hoặc chạm giữ vào từng ô số để kéo lên/xuống tinh chỉnh định lượng', ru: 'Двигайте ползунок или тяните числа вверх/вниз для точной настройки' },
+    sliderTitle: { vi: 'Khối lượng cải thảo tươi (Nguyên liệu gốc)', ru: 'Вес свежей пекинской капусты (База)' },
+    sliderDesc: { vi: 'Kéo thanh trượt để tự động nhân chia toàn bộ gia vị theo tỷ lệ chuẩn', ru: 'Перемещайте ползунок для пересчета всех ингредиентов' },
+    tableTitle: { vi: 'Bảng Nguyên Liệu Định Lượng (Kéo chuột / vuốt lên xuống trên ô số)', ru: 'Матрица ингредиентов (Тяните числа вверх/вниз)' },
+    tableHint: { vi: 'Nhấp giữ ô số và kéo lên để tăng, kéo xuống để giảm theo khẩu vị', ru: 'Удерживайте число и тяните вверх или вниз для корректировки' },
+    colIng: { vi: 'Nguyên liệu', ru: 'Ингредиент' },
+    colQty: { vi: 'Định lượng (Kéo ↕)', ru: 'Вес / Объем (↕)' },
+    colPrep: { vi: 'Quy cách sơ chế & Kỹ thuật', ru: 'Обработка и нарезка' },
+    stepsTitle: { vi: 'Quy Trình Thực Hiện Chuẩn Hóa (4 Giai Đoạn)', ru: 'Пошаговая технология (4 этапа)' },
+    resetBtn: { vi: 'Đặt lại tỷ lệ gốc', ru: 'Сбросить ручные правки' },
+    copyBtn: { vi: '📋 Chép DS mua sắm', ru: '📋 Копировать список' }
+  };
+
+  var RECIPES = {
+    maangchi: {
+      tag: '01 • MAANGCHI (TRUYỀN THỐNG)',
+      name: { vi: 'Kimchi Cải Thảo Nguyên Bắp (Tongbaechu)', ru: 'Традиционный кимчи (Тонбэчху)' },
+      sub: { vi: 'Hồ nếp + Tép muối Saeujeot + Hẹ & Rau cần', ru: 'Рисовый клейстер + Креветки Сэуджот' },
+      saltTime: { vi: '2 giờ (lật mỗi 30p)', ru: '2 часа (переворот 30 мин)' },
+      fermentTime: { vi: '24 – 36 giờ phòng', ru: '24 – 36 ч при комн. t°' },
+      items: [
+        { group: { vi: 'Ướp muối', ru: 'Засолка' }, name: { vi: 'Muối biển hạt thô', ru: 'Морская соль крупная' }, perKg: 66.7, step: 5, dec: 0, unit: 'g', prep: { vi: 'Xát đều từng bẹ lá, tập trung 80% ở cuống trắng', ru: 'Натереть листья, 80% соли у основания' } },
+        { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Bột gạo nếp (Mochiko)', ru: 'Клейкая рисовая мука' }, perKg: 7.4, step: 0.5, dec: 1, unit: 'g', prep: { vi: 'Hòa nước lạnh, đun sôi lăn tăn 10 phút', ru: 'Развести в воде, варить 10 мин' } },
+        { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Nước lọc nấu hồ', ru: 'Вода для клейстера' }, perKg: 177.8, step: 10, dec: 0, unit: 'ml', prep: { vi: 'Đun cùng bột nếp, để nguội 100% trước khi trộn', ru: 'Варить с мукой, полностью остудить' } },
+        { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Đường nâu', ru: 'Коричневый сахар' }, perKg: 9.3, step: 1, dec: 0, unit: 'g', prep: { vi: 'Khuấy tan vào hồ nếp vừa chín rồi tắt bếp', ru: 'Вмешать в горячий клейстер' } },
+        { group: { vi: 'Rau củ', ru: 'Овощи' }, name: { vi: 'Củ cải trắng Hàn Quốc', ru: 'Корейская редька (Дайкон)' }, perKg: 92.6, step: 5, dec: 0, unit: 'g', prep: { vi: 'Thái sợi chỉ 2–3 mm', ru: 'Нарезать тонкой соломкой 2–3 мм' } },
+        { group: { vi: 'Rau củ', ru: 'Овощи' }, name: { vi: 'Hành lá & Hẹ lá châu Á', ru: 'Зеленый лук и джусай' }, perKg: 59.3, step: 5, dec: 0, unit: 'g', prep: { vi: 'Cắt khúc dài 4–5 cm', ru: 'Нарезать брусочками 4–5 см' } },
+        { group: { vi: 'Gia vị xay', ru: 'Пюре' }, name: { vi: 'Tỏi khô bóc vỏ', ru: 'Чеснок очищенный' }, perKg: 22.2, step: 2, dec: 0, unit: 'g', prep: { vi: 'Xay nhuyễn mịn cùng gừng và hành tây', ru: 'Измельчить в блендере с имбирем и луком' } },
+        { group: { vi: 'Gia vị xay', ru: 'Пюре' }, name: { vi: 'Hành tây', ru: 'Репчатый лук' }, perKg: 44.4, step: 5, dec: 0, unit: 'g', prep: { vi: 'Cắt múi cau nhỏ rồi xay nhuyễn', ru: 'Нарезать и пюрировать в блендере' } },
+        { group: { vi: 'Gia vị xay', ru: 'Пюре' }, name: { vi: 'Gừng tươi', ru: 'Корень имбиря' }, perKg: 3.7, step: 0.5, dec: 1, unit: 'g', prep: { vi: 'Gọt vỏ, thái lát mỏng cho vào cối xay', ru: 'Очистить, измельчить в блендере' } },
+        { group: { vi: 'Đạm Umami', ru: 'Умами' }, name: { vi: 'Nước mắm cá cơm', ru: 'Рыбный соус анчоусный' }, perKg: 44.4, step: 5, dec: 0, unit: 'ml', prep: { vi: 'Đổ trực tiếp vào sốt hồ nếp nguội', ru: 'Влить в остывший клейстер' } },
+        { group: { vi: 'Đạm Umami', ru: 'Умами' }, name: { vi: 'Tép muối lên men (Saeujeot)', ru: 'Соленые креветки (Сэуджот)' }, perKg: 16.7, step: 2, dec: 0, unit: 'g', prep: { vi: 'Vắt nước cốt, băm nhuyễn phần xác tép', ru: 'Отжать сок, креветки мелко порубить' } },
+        { group: { vi: 'Ớt bột', ru: 'Перец' }, name: { vi: 'Ớt bột Hàn Quốc (Gochugaru)', ru: 'Перец хлопьями Кочукару' }, perKg: 66.7, step: 5, dec: 0, unit: 'g', prep: { vi: 'Loại vảy thô (Coarse), trộn khi hồ nguội', ru: 'Крупный помол, вмешать в холодный клейстер' } }
+      ],
+      steps: [
+        { title: { vi: '1. Sơ chế & Ướp muối (2 giờ)', ru: '1. Подготовка и засолка (2 ч)' }, desc: { vi: 'Khía cuống cải 1/3, xé đôi. Nhúng ướt nước lạnh rồi xát muối vào từng bẹ lá (tập trung cuống trắng). Ủ 2 giờ, lật mặt mỗi 30 phút đến khi bẹ uốn cong không gãy.', ru: 'Надрезать основание на 1/3, разорвать. Смочить водой и пересыпать солью. Держать 2 часа, переворачивая каждые 30 мин.' } },
+        { title: { vi: '2. Nấu hồ nếp & Xay gia vị', ru: '2. Варка клейстера и пюре' }, desc: { vi: 'Khuấy tan bột nếp với nước lạnh, đun lửa vừa 10 phút đến khi sánh trong, thêm đường nâu khuấy tan rồi để nguội hoàn toàn. Xay nhuyễn tỏi, hành tây, gừng.', ru: 'Сварить рисовый клейстер (10 мин), добавить сахар и полностью остудить. Измельчить в блендере чеснок, лук и имбирь.' } },
+        { title: { vi: '3. Phối trộn sốt & Xả cải', ru: '3. Сборка пасты и промывка' }, desc: { vi: 'Trộn hồ nếp nguội với Gochugaru, nước mắm, tép muối băm, gia vị xay và củ cải, hành hẹ. Xả cải qua 3 lần nước lạnh, vắt nhẹ để ráo 30 phút.', ru: 'Смешать холодный клейстер с Кочукару, рыбным соусом, креветками и овощами. Промыть капусту в 3 водах и дать стечь.' } },
+        { title: { vi: '4. Phết sốt & Ủ lên men', ru: '4. Промазывание и ферментация' }, desc: { vi: 'Phết đều sốt vào từng kẽ lá từ ngoài vào trong, cuộn gọn xếp chặt vào hộp kín khí. Ủ phòng 24–36 giờ đến khi sủi tăm nhẹ rồi cất tủ mát.', ru: 'Промазать каждый лист пастой, свернуть и плотно уложить в контейнер. Выдержать 24–36 ч при комнатной t°, затем убрать в холод.' } }
+      ]
+    },
+    kimdaeseok: {
+      tag: '02 • CHEF KIM DAE-SEOK',
+      name: { vi: 'Kimchi Mùa Hè Tươi Mát (Yeoreum)', ru: 'Летний освежающий кимчи (Ёрым)' },
+      sub: { vi: 'Ớt sừng tươi xay + Lê Hàn Quốc + Si-rô mận', ru: 'Свежий перец + Корейская груша + Сливовый сироп' },
+      saltTime: { vi: '4 giờ (nước muối + muối hạt)', ru: '4 часа (рассол + сухая соль)' },
+      fermentTime: { vi: '12 – 24 giờ phòng', ru: '12 – 24 ч при комн. t°' },
+      items: [
+        { group: { vi: 'Ướp muối', ru: 'Засолка' }, name: { vi: 'Nước ngâm muối ban đầu', ru: 'Вода для рассола' }, perKg: 1000, step: 100, dec: 0, unit: 'ml', prep: { vi: 'Hòa tan 50% lượng muối để nhúng ngập cải', ru: 'Растворить 50% соли для замачивания' } },
+        { group: { vi: 'Ướp muối', ru: 'Засолка' }, name: { vi: 'Muối biển hạt thô (Tổng)', ru: 'Морская соль (Всего)' }, perKg: 91.4, step: 5, dec: 0, unit: 'g', prep: { vi: 'Một nửa pha nước, một nửa xát trực tiếp vào cuống', ru: 'Половину в воду, половину между листьями' } },
+        { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Bột gạo nếp', ru: 'Клейкая рисовая мука' }, perKg: 6.4, step: 0.5, dec: 1, unit: 'g', prep: { vi: 'Khuấy tan bằng phới lồng trong nước lạnh', ru: 'Размешать венчиком в холодной воде' } },
+        { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Nước nấu hồ nếp', ru: 'Вода для клейстера' }, perKg: 42.8, step: 5, dec: 0, unit: 'ml', prep: { vi: 'Đun sôi chín kỹ 3–4 phút khử mùi bột sống', ru: 'Проварить 3–4 мин до прозрачности' } },
+        { group: { vi: 'Sốt tươi', ru: 'Свежий соус' }, name: { vi: 'Ớt sừng đỏ & ớt cay tươi', ru: 'Свежий красный перец и чили' }, perKg: 50.0, step: 5, dec: 0, unit: 'g', prep: { vi: 'Cắt khúc xay nhuyễn mịn cùng nước lọc', ru: 'Измельчить в блендере с водой' } },
+        { group: { vi: 'Sốt tươi', ru: 'Свежий соус' }, name: { vi: 'Quả lê Hàn Quốc (Bae)', ru: 'Корейская груша (Bae)' }, perKg: 35.7, step: 5, dec: 0, unit: 'g', prep: { vi: 'Gọt vỏ bỏ lõi, xay nhuyễn tạo vị ngọt thanh', ru: 'Очистить, пюрировать для свежести' } },
+        { group: { vi: 'Gia vị xay', ru: 'Пюре' }, name: { vi: 'Tỏi khô bóc vỏ', ru: 'Чеснок очищенный' }, perKg: 14.3, step: 2, dec: 0, unit: 'g', prep: { vi: 'Xay nhuyễn cùng ớt tươi và lê', ru: 'Пюрировать вместе с перцем и грушей' } },
+        { group: { vi: 'Gia vị xay', ru: 'Пюре' }, name: { vi: 'Gừng tươi', ru: 'Корень имбиря' }, perKg: 2.1, step: 0.5, dec: 1, unit: 'g', prep: { vi: 'Cạo vỏ, xay nhuyễn mịn', ru: 'Очистить и измельчить в блендере' } },
+        { group: { vi: 'Đạm Umami', ru: 'Умами' }, name: { vi: 'Nước mắm cá cơm Hàn Quốc', ru: 'Анчоусный рыбный соус' }, perKg: 35.0, step: 5, dec: 0, unit: 'g', prep: { vi: 'Xay cùng ớt và nêm chốt lại khi trộn sốt', ru: 'Влить в блендер и довести вкус в конце' } },
+        { group: { vi: 'Đạm Umami', ru: 'Умами' }, name: { vi: 'Tép muối Saeujeot', ru: 'Соленые креветки (Сэуджот)' }, perKg: 11.4, step: 2, dec: 0, unit: 'g', prep: { vi: 'Cho vào cối xay nhuyễn cùng hỗn hợp ớt', ru: 'Измельчить в блендере с перцами' } },
+        { group: { vi: 'Tạo ngọt', ru: 'Сладость' }, name: { vi: 'Si-rô mận Hàn Quốc (Maesil)', ru: 'Сливовый сироп (Мэсиль)' }, perKg: 6.4, step: 1, dec: 0, unit: 'ml', prep: { vi: 'Đổ trực tiếp vào thau sốt tạo hương thanh', ru: 'Влить в соус для фруктового аромата' } },
+        { group: { vi: 'Ớt bột', ru: 'Перец' }, name: { vi: 'Ớt bột Hàn Quốc (Gochugaru)', ru: 'Перец хлопьями Кочукару' }, perKg: 50.0, step: 5, dec: 0, unit: 'g', prep: { vi: 'Trộn cùng nước xay sốt cho độ lỏng mượt', ru: 'Смешать с соусом до умеренно жидкой текстуры' } },
+        { group: { vi: 'Rau củ', ru: 'Овощи' }, name: { vi: 'Củ cải sợi + Hành lá + Hành tây', ru: 'Дайкон + Зеленый и репчатый лук' }, perKg: 150.0, step: 10, dec: 0, unit: 'g', prep: { vi: 'Thái sợi mỏng 2–3mm và cắt khúc 4cm', ru: 'Нарезать тонкой соломкой и брусочками 4 см' } }
+      ],
+      steps: [
+        { title: { vi: '1. Ủ muối kép 4 giờ dưới lớp nilon', ru: '1. Двойная засолка 4 ч под пленкой' }, desc: { vi: 'Chẻ tư bắp cải, nhúng nước pha 50% muối rồi xát 50% muối còn lại vào bẹ cuống. Phủ túi nilon kín ủ 4 giờ (đảo mặt sau 2 giờ). Rửa sạch 3 lần nước.', ru: 'Разделить кочаны на 4 части, окунуть в рассол и пересыпать оставшейся солью. Накрыть пленкой на 4 ч (перевернуть через 2 ч). Промыть 3 раза.' } },
+        { title: { vi: '2. Quấy hồ nếp chín kỹ', ru: '2. Проварка клейстера до прозрачности' }, desc: { vi: 'Hòa bột nếp với nước lạnh, đun lửa vừa khuấy liên tục 3–4 phút cho chín trong để khử hoàn toàn mùi bột sống, để nguội 100%.', ru: 'Размешать муку в холодной воде, варить 3–4 мин при постоянном помешивании, полностью остудить.' } },
+        { title: { vi: '3. Xay sốt ớt tươi & Quả lê', ru: '3. Свежая паста с перцем и грушей' }, desc: { vi: 'Xay nhuyễn ớt sừng đỏ, ớt cay, lê Hàn Quốc, tỏi, gừng, tép muối và nước mắm với chút nước lọc. Trộn cùng hồ nguội, Gochugaru, si-rô mận và rau củ.', ru: 'Пюрировать свежие перцы, грушу, чеснок, имбирь, креветки и рыбный соус. Смешать с клейстером, Кочукару, сиропом и овощами.' } },
+        { title: { vi: '4. Vào sốt lỏng & Bảo quản mát', ru: '4. Сборка и охлаждение' }, desc: { vi: 'Vuốt đều sốt vào từng kẽ lá, cuộn tròn xếp chặt vào hộp và rưới phần nước sốt còn lại phủ kín mặt cải. Dùng ngon sau 1–2 ngày.', ru: 'Промазать листья, плотно уложить в контейнер и залить оставшимся соусом. Готов через 1–2 дня.' } }
+      ]
+    },
+    foodkor: {
+      tag: '03 • FOODKOR PRO',
+      name: { vi: 'Kimchi Nhà Hàng Tối Ưu (Giòn Lâu)', ru: 'Ресторанный хрустящий кимчи' },
+      sub: { vi: 'Tỷ lệ cân bằng hiện đại • Giòn lâu, ít chảy nước', ru: 'Сбалансированная формула • Долгий хруст' },
+      saltTime: { vi: '4 giờ (ủ muối khô)', ru: '4 часа (сухой посол)' },
+      fermentTime: { vi: '48 giờ phòng + 48 giờ mát', ru: '48 ч комн. t° + 48 ч холод' },
+      items: [
+        { group: { vi: 'Ướp muối', ru: 'Засолка' }, name: { vi: 'Muối biển hạt vừa', ru: 'Морская соль крупная' }, perKg: 78.6, step: 5, dec: 0, unit: 'g', prep: { vi: 'Xát đều từng kẽ lá cải đã làm ẩm', ru: 'Пересыпать увлажненные листья' } },
+        { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Bột gạo nếp', ru: 'Клейкая рисовая мука' }, perKg: 12.9, step: 1, dec: 1, unit: 'g', prep: { vi: 'Hòa nước lạnh cùng đường trước khi đun', ru: 'Развести в воде с сахаром' } },
+        { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Nước lọc nấu hồ', ru: 'Вода для клейстера' }, perKg: 114.3, step: 10, dec: 0, unit: 'ml', prep: { vi: 'Đun sôi nhẹ 8–10 phút rồi để nguội 100%', ru: 'Варить 8–10 мин и полностью остудить' } },
+        { group: { vi: 'Hồ nếp', ru: 'Клейстер' }, name: { vi: 'Đường cát', ru: 'Сахар-песок' }, perKg: 12.9, step: 1, dec: 1, unit: 'g', prep: { vi: 'Khuấy tan cùng bột nếp khi đun hồ', ru: 'Растворить в клейстере при варке' } },
+        { group: { vi: 'Rau củ', ru: 'Овощи' }, name: { vi: 'Củ cải trắng Hàn Quốc', ru: 'Корейская редька (Дайкон)' }, perKg: 100.0, step: 10, dec: 0, unit: 'g', prep: { vi: 'Bào hoặc thái sợi chỉ 2–3 mm', ru: 'Натереть тонкой соломкой 2–3 мм' } },
+        { group: { vi: 'Rau củ', ru: 'Овощи' }, name: { vi: 'Hành lá (Scallions)', ru: 'Зеленый лук' }, perKg: 34.3, step: 5, dec: 0, unit: 'g', prep: { vi: 'Cắt khúc 4–5 cm, chẻ đôi gốc trắng', ru: 'Нарезать брусочками 4–5 см' } },
+        { group: { vi: 'Gia vị xay', ru: 'Пюре' }, name: { vi: 'Quả lê Hàn Quốc (Bae)', ru: 'Корейская груша (Bae)' }, perKg: 57.1, step: 5, dec: 0, unit: 'g', prep: { vi: 'Gọt vỏ bỏ lõi, xay nhuyễn tạo vị ngọt thanh', ru: 'Очистить, пюрировать для свежести' } },
+        { group: { vi: 'Gia vị xay', ru: 'Пюре' }, name: { vi: 'Hành tây + Tỏi + Gừng xay', ru: 'Лук + Чеснок + Имбирь (пюре)' }, perKg: 67.1, step: 5, dec: 0, unit: 'g', prep: { vi: 'Xay nhuyễn mịn cùng quả lê', ru: 'Измельчить в блендере с грушей' } },
+        { group: { vi: 'Đạm Umami', ru: 'Умами' }, name: { vi: 'Nước mắm cá cơm Hàn Quốc', ru: 'Анчоусный рыбный соус' }, perKg: 42.9, step: 5, dec: 0, unit: 'ml', prep: { vi: 'Đổ trực tiếp vào thau sốt', ru: 'Влить в смесь специй' } },
+        { group: { vi: 'Đạm Umami', ru: 'Умами' }, name: { vi: 'Tép muối Saeujeot + Si-rô mận', ru: 'Креветки Сэуджот + Сливовый сироп' }, perKg: 30.0, step: 5, dec: 0, unit: 'g', prep: { vi: 'Băm nhỏ tép muối và rưới si-rô mận', ru: 'Мелко порубить креветки, влить сироп' } },
+        { group: { vi: 'Ớt bột', ru: 'Перец' }, name: { vi: 'Ớt bột Hàn Quốc (Gochugaru)', ru: 'Перец хлопьями Кочукару' }, perKg: 92.9, step: 5, dec: 0, unit: 'g', prep: { vi: 'Trộn đều khi hồ nếp đã nguội hoàn toàn', ru: 'Вмешать в остывший клейстер' } }
+      ],
+      steps: [
+        { title: { vi: '1. Ủ muối khô giữ độ giòn (4 giờ)', ru: '1. Сухой посол для хруста (4 ч)' }, desc: { vi: 'Chẻ cải làm 4, nhúng ướt nước lạnh rồi xát muối tập trung vào cuống trắng dày. Đảo mặt mỗi 60 phút, sau đó rửa sạch 3 lần nước lạnh và vắt ráo 30 phút.', ru: 'Разделить на 4 части, пересыпать солью у основания. Переворачивать каждый час, промыть в 3 водах.' } },
+        { title: { vi: '2. Chuẩn bị hồ nếp & Sốt trái cây', ru: '2. Клейстер и фруктовая основа' }, desc: { vi: 'Nấu chín hồ nếp để nguội 100%. Xay nhuyễn lê Hàn Quốc, hành tây, tỏi, gừng thành hỗn hợp sánh mịn.', ru: 'Сварить и остудить клейстер. Измельчить грушу, лук, чеснок и имбирь в однородное пюре.' } },
+        { title: { vi: '3. Phối trộn rau củ giòn', ru: '3. Смешивание с овощами' }, desc: { vi: 'Trộn củ cải sợi, hành lá với sinh tố lê-tỏi, hồ nếp nguội, nước mắm, tép muối, si-rô mận và bột ớt Gochugaru.', ru: 'Смешать дайкон и лук с пюре, клейстером, рыбным соусом, креветками, сиропом и Кочукару.' } },
+        { title: { vi: '4. Đóng hộp & Lên men chuẩn 2 + 2', ru: '4. Укладка и ферментация 2 + 2' }, desc: { vi: 'Phết sốt đều từng lá, xếp chặt vào hộp và ấn tấm ép loại bỏ túi khí. Ủ phòng 48 giờ rồi chuyển ngăn mát 48 giờ trước khi ăn.', ru: 'Промазать листья, плотно уложить под пресс. Выдержать 48 ч при комнатной t°, затем 48 ч в холоде.' } }
+      ]
+    }
+  };
+
+  function getTxt(obj) {
+    if (!obj) return '';
+    if (lang === 'both') return obj.vi + ' / ' + obj.ru;
+    return obj[lang] || obj.vi;
+  }
+
+  function fmt(val, dec) {
+    return dec > 0 ? val.toFixed(dec) : Math.round(val).toString();
+  }
+
+  function setLang(newLang) {
+    lang = newLang;
+    document.getElementById('btn-vi').classList.remove('active');
+    document.getElementById('btn-ru').classList.remove('active');
+    document.getElementById('btn-both').classList.remove('active');
+    document.getElementById('btn-' + newLang).classList.add('active');
+    renderAll();
+  }
+
+  function selectRecipe(key) {
+    activeRecipeKey = key;
+    recalculateAll();
+  }
+
+  function recalculateAll() {
+    var rec = RECIPES[activeRecipeKey];
+    currentItems = rec.items.map(function(item) {
+      return {
+        group: item.group,
+        name: item.name,
+        perKg: item.perKg,
+        step: item.step,
+        dec: item.dec,
+        unit: item.unit,
+        prep: item.prep,
+        val: item.perKg * cabbageKg
+      };
+    });
+    renderAll();
+  }
+
+  function renderAll() {
+    document.getElementById('uiTitle').textContent = getTxt(UI_TEXT.title);
+    document.getElementById('uiSubtitle').textContent = getTxt(UI_TEXT.subtitle);
+    document.getElementById('uiSliderTitle').textContent = getTxt(UI_TEXT.sliderTitle);
+    document.getElementById('uiSliderDesc').textContent = getTxt(UI_TEXT.sliderDesc);
+    document.getElementById('uiTableTitle').textContent = getTxt(UI_TEXT.tableTitle);
+    document.getElementById('uiTableHint').textContent = getTxt(UI_TEXT.tableHint);
+    document.getElementById('colIng').textContent = getTxt(UI_TEXT.colIng);
+    document.getElementById('colQty').textContent = getTxt(UI_TEXT.colQty);
+    document.getElementById('colPrep').textContent = getTxt(UI_TEXT.colPrep);
+    document.getElementById('uiStepsTitle').textContent = getTxt(UI_TEXT.stepsTitle);
+    document.getElementById('uiResetBtn').textContent = getTxt(UI_TEXT.resetBtn);
+    document.getElementById('btnCopy').textContent = getTxt(UI_TEXT.copyBtn);
+    document.getElementById('kgDisplay').textContent = cabbageKg.toFixed(1);
+
+    var tabsHtml = '';
+    var keys = Object.keys(RECIPES);
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      var r = RECIPES[k];
+      var act = (k === activeRecipeKey) ? 'active' : '';
+      tabsHtml += '<button class="rec-btn ' + act + '" onclick="selectRecipe(\'' + k + '\')">' +
+                  '<div class="rec-tag">' + r.tag + '</div>' +
+                  '<div class="rec-name">' + getTxt(r.name) + '</div>' +
+                  '<div class="rec-sub">' + getTxt(r.sub) + '</div>' +
+                  '</button>';
+    }
+    document.getElementById('recipeTabs').innerHTML = tabsHtml;
+
+    var presets = [1.0, 2.7, 3.5, 5.0, 7.3];
+    var presetsHtml = '';
+    for (var j = 0; j < presets.length; j++) {
+      var p = presets[j];
+      var pAct = (Math.abs(cabbageKg - p) < 0.05) ? 'active' : '';
+      presetsHtml += '<button class="preset-btn ' + pAct + '" onclick="setKg(' + p + ')">' + p.toFixed(1) + ' kg</button>';
+    }
+    document.getElementById('presetList').innerHTML = presetsHtml;
+
+    var rec = RECIPES[activeRecipeKey];
+    var portions = Math.round(cabbageKg * 2.5) + (lang === 'ru' ? ' порц.' : ' phần ăn');
+    var vol = (cabbageKg * 1.6).toFixed(1) + ' L';
+    document.getElementById('metaGrid').innerHTML =
+      '<div class="meta-box"><div class="meta-label">' + (lang === 'ru' ? 'Порций' : 'Khẩu phần') + '</div><div class="meta-val">' + portions + '</div></div>' +
+      '<div class="meta-box"><div class="meta-label">' + (lang === 'ru' ? 'Время засолки' : 'Ủ muối') + '</div><div class="meta-val" style="color:#2563eb">' + getTxt(rec.saltTime) + '</div></div>' +
+      '<div class="meta-box"><div class="meta-label">' + (lang === 'ru' ? 'Ферментация' : 'Lên men') + '</div><div class="meta-val" style="color:#d97706">' + getTxt(rec.fermentTime) + '</div></div>' +
+      '<div class="meta-box"><div class="meta-label">' + (lang === 'ru' ? 'Объем тары' : 'Hũ chứa') + '</div><div class="meta-val">' + vol + '</div></div>';
+
+    var ingHtml = '';
+    for (var m = 0; m < currentItems.length; m++) {
+      var item = currentItems[m];
+      ingHtml += '<div class="div-grid-row">' +
+                 '<div><div class="ing-title">' + getTxt(item.name) + '</div><span class="ing-tag">' + getTxt(item.group) + '</span></div>' +
+                 '<div class="val-cell">' +
+                 '<div class="scrub-box" id="scrub-' + m + '" onmousedown="startScrub(event, ' + m + ')" ontouchstart="startScrub(event, ' + m + ')" onwheel="wheelScrub(event, ' + m + ')">' + fmt(item.val, item.dec) + '</div>' +
+                 '<span class="unit-txt">' + item.unit + '</span>' +
+                 '</div>' +
+                 '<div class="col-prep prep-txt">' + getTxt(item.prep) + '</div>' +
+                 '</div>';
+    }
+    document.getElementById('ingTableBody').innerHTML = ingHtml;
+
+    var stepsHtml = '';
+    for (var n = 0; n < rec.steps.length; n++) {
+      var s = rec.steps[n];
+      stepsHtml += '<div class="step-item"><h3>' + getTxt(s.title) + '</h3><p>' + getTxt(s.desc) + '</p></div>';
+    }
+    document.getElementById('stepsGrid').innerHTML = stepsHtml;
+  }
+
+  function setKg(val) {
+    cabbageKg = val;
+    document.getElementById('masterSlider').value = val;
+    recalculateAll();
+  }
+
+  document.getElementById('masterSlider').addEventListener('input', function(e) {
+    cabbageKg = parseFloat(e.target.value);
+    recalculateAll();
+  });
+
+  function startScrub(e, idx) {
+    if (e.cancelable) e.preventDefault();
+    scrubIdx = idx;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    startVal = currentItems[idx].val;
+    document.getElementById('scrub-' + idx).classList.add('active');
+    document.body.style.cursor = 'ns-resize';
+  }
+
+  function onScrub(e) {
+    if (scrubIdx === null) return;
+    if (e.cancelable) e.preventDefault();
+    var curY = e.touches ? e.touches[0].clientY : e.clientY;
+    var item = currentItems[scrubIdx];
+    var steps = Math.round((startY - curY) / 6);
+    item.val = Math.max(0, startVal + steps * item.step);
+    document.getElementById('scrub-' + scrubIdx).textContent = fmt(item.val, item.dec);
+  }
+
+  function endScrub() {
+    if (scrubIdx === null) return;
+    var el = document.getElementById('scrub-' + scrubIdx);
+    if (el) el.classList.remove('active');
+    scrubIdx = null;
+    document.body.style.cursor = 'default';
+  }
+
+  function wheelScrub(e, idx) {
+    e.preventDefault();
+    var item = currentItems[idx];
+    item.val = Math.max(0, item.val + (e.deltaY < 0 ? item.step : -item.step));
+    document.getElementById('scrub-' + idx).textContent = fmt(item.val, item.dec);
+  }
+
+  window.addEventListener('mousemove', onScrub);
+  window.addEventListener('touchmove', onScrub, { passive: false });
+  window.addEventListener('mouseup', endScrub);
+  window.addEventListener('touchend', endScrub);
+
+  function copyList() {
+    var rec = RECIPES[activeRecipeKey];
+    var header = getTxt(rec.name) + ' (' + cabbageKg.toFixed(1) + ' kg)';
+    var lines = currentItems.map(function(i) {
+      return '- ' + getTxt(i.name) + ': ' + fmt(i.val, i.dec) + ' ' + i.unit;
+    });
+    navigator.clipboard.writeText(header + '\n' + lines.join('\n'));
+    var btn = document.getElementById('btnCopy');
+    btn.textContent = lang === 'ru' ? '✅ Скопировано!' : '✅ Đã chép danh sách!';
+    setTimeout(function() { btn.textContent = getTxt(UI_TEXT.copyBtn); }, 2000);
+  }
+
+  recalculateAll();
+</script>
+</body>
+</html>
