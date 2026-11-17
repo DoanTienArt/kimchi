@@ -1,0 +1,358 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="vi"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Bảng Định Lượng Kimchi Tương Tác&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--primary: #0f172a;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--accent: #2563eb;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--accent-hover: #1d4ed8;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--bg: #f8fafc;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--card: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--border: #e2e8f0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--text: #334155;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>--muted: #64748b;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>* { box-sizing: border-box; margin: 0; padding: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: var(--bg);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: var(--text);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>line-height: 1.5;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.container {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-width: 760px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 0 auto;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: var(--card);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.header-box {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 22px 24px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.header-box h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.header-box p { font-size: 13px; color: #94a3b8; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.guide-bar {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #eff6ff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #1e40af;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 13px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px 24px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-bottom: 1px solid #dbeafe;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-reset {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #bfdbfe;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #1d4ed8;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 4px 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 6px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.btn-reset:hover { background: #dbeafe; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Cấu trúc bảng bằng DIV (CSS Grid) */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.div-table { display: flex; flex-direction: column; width: 100%; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.div-row {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>grid-template-columns: 2.2fr 1.2fr 0.7fr 1.5fr;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 12px 24px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-bottom: 1px solid var(--border);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transition: background 0.15s;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.div-row:hover:not(.div-header) { background: #f8fafc; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.div-header {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #f1f5f9;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-transform: uppercase;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>letter-spacing: 0.04em;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: var(--muted);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.row-master {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #fefce8 !important;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-bottom: 2px solid #fde047;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ing-name { font-weight: 600; color: var(--primary); font-size: 14px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.ing-sub { font-size: 12px; color: var(--muted); display: block; font-weight: 400; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>/* Ô số có thể kéo trượt lên/xuống */</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.scrub-box {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: inline-flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>min-width: 78px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 6px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #f1f5f9;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 1.5px solid #cbd5e1;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: ui-monospace, SFMono-Regular, Menlo, monospace;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: var(--accent);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: ns-resize;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>touch-action: none; /* Hỗ trợ vuốt trên điện thoại */</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transition: all 0.15s ease;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.row-master .scrub-box {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #fef08a;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-color: #eab308;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #854d0e;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.scrub-box:hover {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-color: var(--accent);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #e0e7ff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.scrub-box.active {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: var(--accent) !important;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-color: var(--accent) !important;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #fff !important;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transform: scale(1.06);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>.unit-col { font-size: 13px; color: var(--muted); font-weight: 500; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.note-col { font-size: 12px; color: var(--muted); }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width: 600px) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.div-row {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>grid-template-columns: 1.8fr 1.1fr 0.6fr;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>padding: 12px 16px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.note-col { display: none; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div class="container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="header-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Bảng Định Lượng Kimchi Chuẩn Hóa&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;File độc lập – Hoạt động offline – Không cần tài khoản Google&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="guide-bar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;span&gt;💡 &lt;b&gt;Cách chỉnh số:&lt;/b&gt; Nhấn giữ vào ô số và &lt;b&gt;kéo lên&lt;/b&gt; để tăng, &lt;b&gt;kéo xuống&lt;/b&gt; để giảm (hoặc lăn chuột).&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="btn-reset" onclick="resetDefaults()"&gt;Đặt lại mốc 1.0 kg&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="div-table" id="recipeTable"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Header --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row div-header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;Nguyên liệu&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;Định lượng&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;Đơn vị&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Ghi chú kỹ thuật&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Dòng gốc (Master Row - kéo dòng này sẽ tự động nhân chia toàn bộ các dòng dưới) --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row row-master"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ing-name"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>Cải thảo tươi (Nguyên liệu gốc)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="ing-sub"&gt;Kéo ô này để tự động tính lại cả bảng&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="scrub-box" id="masterVal" data-base="1.0" data-step="0.1" data-min="0.5" data-decimals="1" data-master="true"&gt;1.0&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="unit-col"&gt;kg&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Chẻ dọc, xát muối từng bẹ&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Các nguyên liệu phụ thuộc --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ing-name"&gt;Muối biển hạt thô &lt;span class="ing-sub"&gt;Ướp cải thảo&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;&lt;span class="scrub-box" data-base="67" data-step="1" data-min="0"&gt;67&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="unit-col"&gt;g&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Không dùng muối i-ốt&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ing-name"&gt;Bột gạo nếp &lt;span class="ing-sub"&gt;Nấu hồ kết dính&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;&lt;span class="scrub-box" data-base="7.5" data-step="0.5" data-min="0" data-decimals="1"&gt;7.5&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="unit-col"&gt;g&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Hòa tan nước lạnh trước&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ing-name"&gt;Nước lọc &lt;span class="ing-sub"&gt;Nấu hồ nếp&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;&lt;span class="scrub-box" data-base="180" data-step="5" data-min="0"&gt;180&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="unit-col"&gt;ml&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Đun sôi lăn tăn 10 phút&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ing-name"&gt;Củ cải trắng Hàn Quốc &lt;span class="ing-sub"&gt;Rau củ phối trộn&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;&lt;span class="scrub-box" data-base="95" data-step="5" data-min="0"&gt;95&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="unit-col"&gt;g&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Thái sợi chỉ 2-3mm&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ing-name"&gt;Tỏi khô bóc vỏ &lt;span class="ing-sub"&gt;Gia vị xay nhuyễn&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;&lt;span class="scrub-box" data-base="22" data-step="1" data-min="0"&gt;22&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="unit-col"&gt;g&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Xay cùng gừng, hành tây&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ing-name"&gt;Nước mắm cá cơm &lt;span class="ing-sub"&gt;Tạo vị đậm đà Umami&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;&lt;span class="scrub-box" data-base="45" data-step="1" data-min="0"&gt;45&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="unit-col"&gt;ml&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Độ đạm 35-40°&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="div-row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="ing-name"&gt;Ớt bột Hàn Quốc (Gochugaru) &lt;span class="ing-sub"&gt;Tạo màu đỏ &amp; vị cay&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div style="text-align: center;"&gt;&lt;span class="scrub-box" data-base="60" data-step="2" data-min="0"&gt;60&lt;/span&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="unit-col"&gt;g&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="note-col"&gt;Loại vảy thô (Coarse)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p1">&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let activeBox = null;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let startY = 0;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let startVal = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>const boxes = document.querySelectorAll('.scrub-box');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function formatNumber(val, decimals) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return decimals &gt; 0 ? val.toFixed(decimals) : Math.round(val).toString();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Tự động cập nhật các dòng con khi kéo dòng Cải thảo gốc</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function updateAllByRatio(newMasterVal) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>boxes.forEach(box =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (box.dataset.master === "true") return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const base = parseFloat(box.dataset.base);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const decimals = parseInt(box.dataset.decimals || "0");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const calculated = base * newMasterVal;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box.textContent = formatNumber(calculated, decimals);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Bắt đầu kéo (Chuột &amp; Cảm ứng điện thoại)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function startDrag(e, box) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>activeBox = box;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>startY = e.touches ? e.touches[0].clientY : e.clientY;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>startVal = parseFloat(box.textContent);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>box.classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.body.style.cursor = 'ns-resize';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Đang kéo lên/xuống</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function onDrag(e) {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!activeBox) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (e.cancelable) e.preventDefault();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const currentY = e.touches ? e.touches[0].clientY : e.clientY;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const step = parseFloat(activeBox.dataset.step) || 1;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const min = parseFloat(activeBox.dataset.min) ?? 0;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const decimals = parseInt(activeBox.dataset.decimals || "0");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Kéo lên (startY - currentY &gt; 0) -&gt; tăng số; kéo xuống -&gt; giảm số</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const deltaY = startY - currentY;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const stepsMoved = Math.round(deltaY / 6); // 6px = 1 bước nhảy</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let newVal = Math.max(min, startVal + stepsMoved * step);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>activeBox.textContent = formatNumber(newVal, decimals);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (activeBox.dataset.master === "true") {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>updateAllByRatio(newVal);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Kết thúc kéo</p>
+<p class="p1"><span class="Apple-converted-space">  </span>function endDrag() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if (!activeBox) return;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>activeBox.classList.remove('active');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>activeBox = null;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.body.style.cursor = 'default';</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>boxes.forEach(box =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Sự kiện chuột</p>
+<p class="p1"><span class="Apple-converted-space">    </span>box.addEventListener('mousedown', (e) =&gt; startDrag(e, box));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Sự kiện cảm ứng (Mobile/Tablet)</p>
+<p class="p1"><span class="Apple-converted-space">    </span>box.addEventListener('touchstart', (e) =&gt; startDrag(e, box), { passive: false });</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Hỗ trợ lăn bánh xe chuột trực tiếp trên con số</p>
+<p class="p1"><span class="Apple-converted-space">    </span>box.addEventListener('wheel', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const step = parseFloat(box.dataset.step) || 1;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const min = parseFloat(box.dataset.min) ?? 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const decimals = parseInt(box.dataset.decimals || "0");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>let currentVal = parseFloat(box.textContent);</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>currentVal += (e.deltaY &lt; 0 ? step : -step);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>currentVal = Math.max(min, currentVal);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box.textContent = formatNumber(currentVal, decimals);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (box.dataset.master === "true") {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>updateAllByRatio(currentVal);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}, { passive: false });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.addEventListener('mousemove', onDrag);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.addEventListener('touchmove', onDrag, { passive: false });</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.addEventListener('mouseup', endDrag);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>window.addEventListener('touchend', endDrag);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>function resetDefaults() {</p>
+<p class="p1"><span class="Apple-converted-space">    </span>boxes.forEach(box =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const base = parseFloat(box.dataset.base);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const decimals = parseInt(box.dataset.decimals || "0");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box.textContent = formatNumber(base, decimals);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
